@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, FormProvider, useWatch } from 'react-hook-form';
-import './ListarTurmas.scss';
+import './ListarTurmas.scss'
+import Formulario from '../turma';
 
 
 function ListarTurmas() {
