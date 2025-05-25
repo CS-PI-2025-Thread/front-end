@@ -1,5 +1,5 @@
 body{
-    background-color: grey;
+    background-color: rgba(128, 128, 128, 0.541);
 }
 .form {
   max-width: 700px;
@@ -20,8 +20,10 @@ h1 {
 .container {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  align-items: center;
+  padding-top: 2rem;
 }
+
 
 .row {
   display: flex;

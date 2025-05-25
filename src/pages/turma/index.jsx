@@ -1,34 +1,16 @@
 import React from 'react';
 import { useForm, FormProvider, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
 import './index.scss';
-
+import { validationSchemaTurma } from '../../utils/validation';
 import ColorPicker from '../../components/selecaoCores';
 import { Input, Select, Textarea, Button } from "../../components";
 
 const locaisPredefinidos = ['Sala 101', 'Laboratório 2', 'Auditório'];
 
-const validationSchema = Yup.object().shape({
-  turma: Yup.string().required('Nome da turma é obrigatório'),
-  vagas: Yup.number()
-    .typeError('Deve ser um número')
-    .required('Número de vagas é obrigatório')
-    .positive('Deve ser positivo')
-    .integer('Deve ser inteiro'),
-  tempo: Yup.number()
-    .typeError('Informe a duração em minutos')
-    .required('Duração é obrigatória')
-    .positive('Deve ser um número positivo')
-    .integer('A duração deve ser em minutos inteiros'),
-  local: Yup.string().required('Local da aula é obrigatório'),
-  observacoes: Yup.string().max(300, 'Máximo de 300 caracteres'),
-  cor: Yup.string().required('Selecione uma cor'),
-});
-
 function Formulario() {
   const methods = useForm({
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(validationSchemaTurma),
     defaultValues: {
       turma: '',
       vagas: '',
