@@ -6,6 +6,7 @@ import EditClient from "../pages/client/Register/EditClient";
 import EditContract from "../pages/contract/Register/EditContract";
 import { LayoutContract } from "../pages/contract";
 import ListarTurmas from "../pages/ListarTurma/ListarTurmas";
+import Turma from "../pages/turma"
 // Aqui você pode adicionar as rotas do seu projeto
 // Você também pode adicionar rotas aninhadas e, se quiser, até dividir elas em arquivos diferentes
 // Exemplo: clientRoutes.js, adminRoutes.js, etc. Ai faz a importação e exporta tudo aqui
@@ -23,6 +24,7 @@ const AppRoutes = () => {
           <Route path=":id/editar" element={<EditContract />} />
         </Route> 
         <Route path="/listarturma" element={<ListarTurmas/>} />
+        <Route path="/turma" element={<Turma />} />
       </Routes>
     </BrowserRouter>
   );

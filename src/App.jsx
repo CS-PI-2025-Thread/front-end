@@ -1,8 +1,8 @@
-import React from 'react'
-import AppRoutes from './routes/AppRoutes'
+import React from 'react';
+import AppRoutes from './routes/AppRoutes'; // ou outro componente
 
-const App = () => {
-  return <AppRoutes />
+function App() {
+  return <AppRoutes />;
 }
 
-export default App
+export default App;
