@@ -1,108 +1,162 @@
-body{
-    background-color: rgba(128, 128, 128, 0.541);
-}
-.form {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 2rem;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 2rem;
-  font-size: 1.8rem;
-  color: #333;
-}
-
 .container {
+  padding: 2rem;
+}
+
+.form {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding-top: 2rem;
+  gap: 16px;
 }
-
 
 .row {
   display: flex;
-  gap: 1rem;
   flex-wrap: wrap;
-
-  > * {
-    flex: 1;
-    min-width: 180px;
-  }
+  gap: 16px;
 }
 
-
-input,
-select,
-textarea {
-  width: 100%;
-  padding: 0.75rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  color: #333;
-}
-
-button {
-  align-self: flex-start;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  background-color: #2d7ff9;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.padding-top {
-  padding-top: 2rem;
+.row > * {
+  flex: 1;
+  min-width: 150px;
 }
 
 .campo-local {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .widget-novo-local {
-  margin-top: 0.5rem;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-}
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
 
-.input-novo-local {
-  width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 0.5rem;
-  border-radius: 4px;
-  border: 1px solid #aaa;
-}
+  .input-novo-local {
+    flex: 1;
+    padding: 6px;
+  }
 
-.btn-salvar-local {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
+  .btn-salvar-local {
+    padding: 6px 12px;
+    background-color: #444;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+  }
 }
 
 .cor-picker-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 12px;
 }
 
+.listar-container {
+  background: #888;
+  color: white;
+  padding: 16px;
+  font-family: sans-serif;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+
+    .busca {
+      width: 200px;
+      padding: 6px;
+    }
+
+    .btn-add {
+      background: #444;
+      color: white;
+      font-size: 20px;
+      border: none;
+      padding: 4px 10px;
+      cursor: pointer;
+    }
+  }
+
+  .tabela {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .cabecalho,
+    .linha {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 80px 80px auto;
+      align-items: center;
+      padding: 6px 8px;
+      border-radius: 4px;
+    }
+
+    .cabecalho {
+      font-weight: bold;
+      background: #444;
+      color: white;
+    }
+
+    .linha {
+      background: #aaa;
+      color: black;
+
+      .color-bullet {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+
+      button {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        color: black;
+      }
+    }
+  }
+
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .modal-content {
+      background: white;
+      color: black;
+      padding: 20px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 8px;
+      position: relative;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-weight: bold;
+      border: none;
+      background: #444;
+      color: white;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+      z-index: 10;
+    }
+  }
+}

@@ -126,7 +126,6 @@ function Formulario() {
           />
 
           <div className="cor-picker-wrapper">
-            
             <ColorPicker name="cor" />
           </div>
 
