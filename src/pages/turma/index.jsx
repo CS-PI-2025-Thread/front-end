@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,7 +8,7 @@ import { validationSchemaTurma } from '../../utils/validation';
 import ColorPicker from '../../components/selecaoCores';
 import { Input, Select, Textarea, Button } from "../../components";
 
-function Formulario() {
+function Formulario({ turmaEditando, aoSalvar, aoCancelar }) {
   const [locais, setLocais] = useState(['Sala 101', 'Laboratório 2', 'Auditório']);
   const [novoLocal, setNovoLocal] = useState('');
   const [mostrarCampoNovoLocal, setMostrarCampoNovoLocal] = useState(false);
@@ -24,8 +25,16 @@ function Formulario() {
     },
   });
 
-  const { handleSubmit, watch, setValue } = methods;
+  const { handleSubmit, watch, setValue, reset } = methods;
   const localSelecionado = watch('local');
+
+  useEffect(() => {
+    if (turmaEditando) {
+      const valores = { ...turmaEditando };
+      valores.tempo = valores.tempo?.replace(' minutos', '');
+      reset(valores);
+    }
+  }, [turmaEditando, reset]);
 
   const onSubmit = (data) => {
     const novaTurma = {
@@ -38,10 +47,17 @@ function Formulario() {
     };
 
     try {
-      const turmasSalvas = JSON.parse(localStorage.getItem('turmas')) || [];
-      turmasSalvas.push(novaTurma);
+      let turmasSalvas = JSON.parse(localStorage.getItem('turmas')) || [];
+
+      if (turmaEditando) {
+        turmasSalvas = turmasSalvas.map(t => t.turma === turmaEditando.turma ? novaTurma : t);
+      } else {
+        turmasSalvas.push(novaTurma);
+      }
+
       localStorage.setItem('turmas', JSON.stringify(turmasSalvas));
-      alert('Turma cadastrada com sucesso!');
+      alert(`Turma ${turmaEditando ? 'atualizada' : 'cadastrada'} com sucesso!`);
+      aoSalvar();
     } catch (e) {
       console.error("Erro ao salvar turma:", e);
     }
@@ -66,7 +82,7 @@ function Formulario() {
     <div className="container" style={{ paddingTop: '2rem' }}>
       <FormProvider {...methods}>
         <form className="form" onSubmit={handleSubmit(onSubmit)}>
-          <h1>Cadastro de Turma</h1>
+          <h1>{turmaEditando ? 'Editar Turma' : 'Cadastro de Turma'}</h1>
 
           <Input
             name="turma"
@@ -129,7 +145,10 @@ function Formulario() {
             <ColorPicker name="cor" />
           </div>
 
-          <Button type="submit">Cadastrar Turma</Button>
+          <div className="botoes-acao">
+            <Button type="submit">{turmaEditando ? 'Salvar Alterações' : 'Cadastrar Turma'}</Button>
+            <Button type="button" variant="secondary" onClick={aoCancelar}>Cancelar</Button>
+          </div>
         </form>
       </FormProvider>
     </div>
