@@ -1,0 +1,160 @@
+.btn-icon-edit {
+    background: #6161ff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.2rem 0.4rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    margin: 0.2rem 0rem;
+
+    &:hover {
+      background: #003366;
+    }
+  }
+
+.contract-table-container {
+  width: 100%;
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding: 2rem 1rem;
+}
+
+.btn-icon-table {
+  background: #000080;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 0.7rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+
+  .field-search {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    min-width: 220px;
+    background: #fff;
+    transition: border 0.2s;
+    &:focus {
+      border: 1.5px solid #000080;
+      outline: none;
+    }
+  }
+
+  .btn-icon {
+    background: #000080;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 0.7rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      background: #003366;
+    }
+  }
+
+  .bi-funnel-fill {
+    color: #000080;
+    font-size: 1.3rem;
+    margin-right: 0.5rem;
+    cursor: pointer;
+  }
+}
+
+.contract-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #cfcfcf;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px #0001;
+
+  th, td {
+    padding: 1rem 0.6rem;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 1rem;
+  }
+  
+  td {
+    padding: 0rem 0.6rem;
+  }
+
+  th {
+    background: #000080;
+    color: #fff;
+    font-weight: 600;
+    border-bottom: 2px solid #003366;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tbody tr:hover {
+    background: #e0e6f7;
+    transition: background 0.2s;
+  }
+
+  td:last-child, th:last-child {
+    text-align: center;
+    width: 60px;
+  }
+
+  .btn-icon {
+    background: none;
+    border: none;
+    color: #000080;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.3rem;
+    border-radius: 4px;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #dde6fa;
+    }
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-content {
+  background: #fff;
+  padding: 0px 10px 10px 10px;
+  min-width: 60vw;
+  max-width: 60vw;
+  min-height: 85vh;
+  max-height: 85vh;
+  border-radius: 16px;
+  box-shadow: -4px 4px 12px 2px rgba(0, 0, 0, 0.25); 
+}

@@ -1,0 +1,23 @@
+.container-contract-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: 20px;
+  height: 100%;
+
+  .btn-icon {
+  width: auto;
+  min-width: unset;
+  padding: 6px 16px;
+  border-radius: 6px;
+  align-self: flex-start;
+  background: #000080;
+  color: #fff;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+}
+}

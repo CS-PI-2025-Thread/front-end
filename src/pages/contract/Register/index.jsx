@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ToastContainer, toast } from "react-toastify";
@@ -16,9 +17,10 @@ import { useContract } from "../../../contexts/ContractContext";
 import "./styles.scss";
 import "react-toastify/dist/ReactToastify.css";
 
-
 const RegisterContract = ({ initialData = null, onSubmit: externalSubmit }) => {
   console.log("teste", initialData);
+
+  const navigate = useNavigate();
 
   const methods = useForm({
     resolver: yupResolver(validationSchemaContract),
@@ -32,12 +34,6 @@ const RegisterContract = ({ initialData = null, onSubmit: externalSubmit }) => {
   const typeExpire = watch("typeExpire");
 
   useEffect(() => {
-    if (initialData) {
-      methods.reset(initialData);
-    }
-  }, [initialData]);
-
-  useEffect(() => {
     if (installmentable === "aVista") {
       setValue("installments", undefined);
     }
@@ -45,10 +41,10 @@ const RegisterContract = ({ initialData = null, onSubmit: externalSubmit }) => {
 
   let expireLabel = "Validade por ";
   let expirePlaceHolder = "";
-  if (typeExpire === "porSecao") {
+  if (typeExpire === "por Seções") {
     expireLabel += "Seções";
     expirePlaceHolder += "Aulas";
-  } else if (typeExpire === "porTempo") {
+  } else if (typeExpire === "por Tempo") {
     expireLabel += "Tempo";
     expirePlaceHolder += "Meses";
   }
@@ -64,10 +60,10 @@ const RegisterContract = ({ initialData = null, onSubmit: externalSubmit }) => {
   const prepareData = (data) => {
     const parsedData = {
       ...data,
-      status: data.status || undefined,
-      template: data.template || undefined,
-      installmentable: data.installmentable || undefined,
-      installments: data.installments ? Number(data.installments) : undefined,
+      status: data.status || "",
+      template: data.template || "",
+      installmentable: data.installmentable || "",
+      installments: data.installments ? Number(data.installments) : "",
       totalValue: data.totalValue
         ? Number(
             String(data.totalValue)
@@ -75,41 +71,47 @@ const RegisterContract = ({ initialData = null, onSubmit: externalSubmit }) => {
               .replace(/\./g, "")
               .replace(",", ".")
           )
-        : undefined,
-      expire: data.expire ? Number(data.expire) : undefined,
+        : "",
+      expire: data.expire ? Number(data.expire) : "",
       classRoms: Array.isArray(data.classRoms)
         ? data.classRoms
         : data.classRoms
           ? [data.classRoms]
           : [],
-      timeMin: data.timeMin || undefined,
-      timeMax: data.timeMax || undefined,
+      timeMin: data.timeMin || "",
+      timeMax: data.timeMax || "",
       weekdays: Array.isArray(data.weekdays) ? data.weekdays : [],
     };
     return parsedData;
   };
 
-const onSubmit = (data) => {
-  const parsedData = prepareData(data);
+  const onSubmit = (data) => {
+    const parsedData = prepareData(data);
 
-  if (externalSubmit) {
-    externalSubmit(parsedData);
-    return;
-  }
+    if (externalSubmit) {
+      externalSubmit(parsedData);
+      return;
+    }
 
-  if (initialData && initialData.id) {
-    updateContract(initialData.id, parsedData);
-    toast.success("Contrato atualizado!");
-  } else {
-    addContract(parsedData);
-    toast.success("Contrato cadastrado!");
-    reset();
-  }
-};
-
+    if (initialData && initialData.id) {
+      updateContract(initialData.id, parsedData);
+      toast.success("Contrato atualizado!");
+       navigate("/contrato");
+    } else {
+      addContract(parsedData);
+      toast.success("Contrato cadastrado!");
+      reset();
+      navigate("/contrato");
+    }
+  };
 
   return (
-    <div className="container">
+    <div className="container-contract-register">
+      <Button onClick={() => navigate("/contrato")}>
+        <i className="bi bi-arrow-left"></i>
+        Voltar
+      </Button>
+      
       <main className="form">
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -117,14 +119,14 @@ const onSubmit = (data) => {
               <h3>Dados Gerais do Contrato</h3>
               <Input label="Nome do Contrato" name="name" required />
               <Select label="Status" name="status">
-                <option value="disponivel">Disponível</option>
-                <option value="naoDisponivel">Não Disponível</option>
+                <option value="Disponível">Disponível</option>
+                <option value="Não Disponível">Não Disponível</option>
               </Select>
               <Select label="Template" name="template">
                 <option value="">Selecione</option>
-                <option value="templateAzul">Template Azul</option>
-                <option value="templateVerde">Template Verde</option>
-                <option value="templateAmarelo">Template Amarelo</option>
+                <option value="Template Azul">Template Azul</option>
+                <option value="Template Verde">Template Verde</option>
+                <option value="Template Amarelo">Template Amarelo</option>
               </Select>
             </div>
 
@@ -132,15 +134,14 @@ const onSubmit = (data) => {
               <h3>Parcelamento</h3>
               <Select label="Parcelamento" name="installmentable">
                 <option value="">Selecione</option>
-                <option value="parcelavel">Parcelável</option>
-                <option value="aVista">À vista</option>
+                <option value="Parcelável">Parcelável</option>
+                <option value="à Vista">À vista</option>
               </Select>
-              {installmentable === "parcelavel" && (
+              {installmentable === "Parcelável" && (
                 <Input
                   label="Nº de parcelas"
                   name="installments"
                   type="number"
-                  min={0}
                 />
               )}
               <MonetaryInput name="totalValue" label="Valor Total" required />
@@ -150,14 +151,13 @@ const onSubmit = (data) => {
               <h3>Vencimento</h3>
               <Select label="Tipo de Vencimento" name="typeExpire" required>
                 <option value="">Selecione</option>
-                <option value="porSecao">Por Seção</option>
-                <option value="porTempo">Por Tempo</option>
+                <option value="por Seção">Por Seção</option>
+                <option value="por Tempo">Por Tempo</option>
               </Select>
               <Input
                 label={expireLabel}
                 name="expire"
                 type="number"
-                min={0}
                 placeholder={expirePlaceHolder}
                 disabled={typeExpire === ""}
                 required
