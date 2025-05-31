@@ -1,3 +1,5 @@
+@use "../../../styles/vars.scss" as vars;
+
 .container {
   display: flex;
   font-family: Arial, sans-serif;
@@ -11,14 +13,14 @@
     scrollbar-width: none;
 
     .block {
-      background-color: #cfcfcf;
+      background-color: vars.$bg-form;
       padding: 20px;
       margin-bottom: 20px;
       border-radius: 10px;
 
       h3 {
-        background-color: #000080;
-        color: white;
+        background-color: vars.$table-header;
+        color: vars.$text-header;
         padding: 8px 12px;
         margin: -20px -20px 20px -20px;
         font-size: 16px;

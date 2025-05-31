@@ -1,3 +1,5 @@
+@use "../styles/vars.scss" as vars;
+
 .form-group {
   margin-bottom: 1rem;
 
@@ -19,7 +21,7 @@
     resize: none;
     width: 100%;
     padding: 0.5rem;
-    border: 1px solid #ccc;
+    border: 1px solid vars.$border-form;
     border-radius: 4px;
     outline: none;
     transition: border-color 0.2s;
@@ -57,8 +59,8 @@
 
 .btn {
   padding: 10px 20px;
-  background-color: #000080;
-  color: white;
+  background-color: vars.$btn-primary;
+  color: vars.$text-header;
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -66,6 +68,6 @@
   margin: 5px;
 
   &:hover {
-    background-color: #100053e7;
+    background-color: vars.$btn-hoover;
   }
 }

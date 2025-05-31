@@ -1,3 +1,5 @@
+@use "../../../styles/vars.scss" as vars;
+
 .container {
   display: flex;
   font-family: Arial, sans-serif;
@@ -13,9 +15,9 @@
 
     .client-side {
       width: 260px;
-      background: #fff;
+      background: vars.$bg-secondary;
       border-radius: 16px;
-      box-shadow: -4px 4px 12px 2px rgba(0, 0, 0, 0.25); 
+      box-shadow: -4px 4px 12px 2px vars.$text; 
       padding: 24px;
       display: flex;
       flex-direction: column;
@@ -26,19 +28,19 @@
         width: 200px;
         height: 200px;
         border-radius: 50%;
-        background: #cfcfcf;
+        background: vars.$user-color;
         object-fit: cover;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 130px;
-        color: #000080;
+        color: vars.$icon-color;
       }
 
       .client-name {
         font-weight: bold;
         font-size: 20px;
-        color: #000080;
+        color: vars.$icon-color;
         margin: 5px 0 13px;
       }
     }
@@ -57,10 +59,10 @@
       }
 
       .box-info {
-        background: #fff;
+        background: vars.$bg-secondary;
         padding: 20px;
         border-radius: 16px;
-        box-shadow: -4px 4px 12px 2px rgba(0, 0, 0, 0.25); 
+        box-shadow: -4px 4px 12px 2px vars.$text; 
         display: flex;
         flex-direction: column;
         gap: 12px;
