@@ -14,13 +14,17 @@ function ListarTurmas() {
   }, []);
 
   const carregarTurmas = () => {
+    
     const turmasSalvas = JSON.parse(localStorage.getItem('turmas')) || [];
+    turmasSalvas.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
     setTurmas(turmasSalvas);
   };
 
-  const handleVisualizar = (turma) => {
-    setTurmaSelecionada(turma);
-  };
+  const turmasFiltradas = turmas.filter(t =>
+    t.turma.toLowerCase().includes(busca.toLowerCase())
+  );
+
+  const handleVisualizar = (turma) => setTurmaSelecionada(turma);
 
   const handleEditar = (turma) => {
     setTurmaParaEditar(turma);
@@ -38,10 +42,6 @@ function ListarTurmas() {
     carregarTurmas();
   };
 
-  const turmasFiltradas = turmas.filter(t =>
-    t.turma.toLowerCase().includes(busca.toLowerCase())
-  );
-
   if (modoFormulario) {
     return (
       <Formulario
@@ -53,50 +53,54 @@ function ListarTurmas() {
   }
 
   return (
-    <div className="listar-container">
-      <div className="header">
+    <div className="turma-table-container">
+      <div className="turma-table-header">
         <input
-          className="busca"
+          className="turma-search-field"
           type="text"
           placeholder="Buscar turma..."
           value={busca}
-          onChange={(e) => setBusca(e.target.value)}
-          style={{ width: '300px' }}
+          onChange={e => setBusca(e.target.value)}
         />
-        <button className="btn-add" onClick={handleNovaTurma}>+</button>
+        <button className="turma-btn-add" onClick={handleNovaTurma}>Nova Turma</button>
       </div>
 
-      <div className="tabela">
-        <div className="linha cabecalho">
+      <div className="turma-table-list">
+        <div className="turma-table-row turma-table-head">
           <div></div>
           <div>Nome</div>
           <div>Duração</div>
           <div>Local</div>
-          <div>Editar</div>
-          <div>Visualizar</div>
+          <div>Ações</div>
         </div>
         {turmasFiltradas.map((turma, idx) => (
-          <div key={idx} className="linha">
-            <span className="color-bullet" style={{ backgroundColor: turma.cor }}></span>
+          <div key={idx} className="turma-table-row">
+            <span className="turma-color-dot" style={{ backgroundColor: turma.cor }}></span>
             <span>{turma.turma}</span>
             <span>{turma.tempo}</span>
             <span>{turma.local}</span>
-            <button onClick={() => handleEditar(turma)}>✏️</button>
-            <button onClick={() => handleVisualizar(turma)}>👁️</button>
+            <span className="turma-actions">
+              <button className="turma-btn-edit" onClick={() => handleEditar(turma)} title="Editar">
+                <span role="img" aria-label="Editar">✏️</span>
+              </button>
+              <button className="turma-btn-view" onClick={() => handleVisualizar(turma)} title="Visualizar">
+                <span role="img" aria-label="Visualizar">👁️</span>
+              </button>
+            </span>
           </div>
         ))}
       </div>
 
       {turmaSelecionada && (
-        <div className="modal" onClick={() => setTurmaSelecionada(null)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
-            <button className="close-modal" onClick={() => setTurmaSelecionada(null)}>×</button>
+        <div className="turma-modal-overlay" onClick={() => setTurmaSelecionada(null)}>
+          <div className="turma-modal-content" onClick={e => e.stopPropagation()}>
+            <button className="turma-modal-close" onClick={() => setTurmaSelecionada(null)}>×</button>
             <h2>{turmaSelecionada.turma}</h2>
             <p><strong>Vagas:</strong> {turmaSelecionada.vagas}</p>
             <p><strong>Duração:</strong> {turmaSelecionada.tempo}</p>
             <p><strong>Local:</strong> {turmaSelecionada.local}</p>
             <p><strong>Observações:</strong> {turmaSelecionada.observacoes}</p>
-            <p><strong>Cor:</strong> <span className="color-bullet" style={{ backgroundColor: turmaSelecionada.cor }} /></p>
+            <p><strong>Cor:</strong> <span className="turma-color-dot" style={{ backgroundColor: turmaSelecionada.cor }} /></p>
           </div>
         </div>
       )}
