@@ -75,7 +75,7 @@
   }
 
   .turma-btn-edit {
-    background: #6161ff;
+    background: #8b8be4;
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -91,7 +91,7 @@
   }
 
   .turma-btn-view {
-    background: #000080;
+    background: #8b8be4;
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -106,7 +106,11 @@
     }
   }
 }
+.turma-btn-view img{
+  width: 20px;
+  height: 20px;
 
+}
 .turma-table-head {
   font-weight: 600;
   background: #000080;

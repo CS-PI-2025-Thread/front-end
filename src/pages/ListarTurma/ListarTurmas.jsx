@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Formulario from '../turma/index';
 import './ListarTurmas.scss';
+import EyeIcon from '../../assets/olho.png'
 
 function ListarTurmas() {
   const [turmas, setTurmas] = useState([]);
@@ -14,7 +15,6 @@ function ListarTurmas() {
   }, []);
 
   const carregarTurmas = () => {
-    
     const turmasSalvas = JSON.parse(localStorage.getItem('turmas')) || [];
     turmasSalvas.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
     setTurmas(turmasSalvas);
@@ -41,16 +41,6 @@ function ListarTurmas() {
     setTurmaParaEditar(null);
     carregarTurmas();
   };
-
-  if (modoFormulario) {
-    return (
-      <Formulario
-        turmaEditando={turmaParaEditar}
-        aoSalvar={handleFecharFormulario}
-        aoCancelar={handleFecharFormulario}
-      />
-    );
-  }
 
   return (
     <div className="turma-table-container">
@@ -84,13 +74,28 @@ function ListarTurmas() {
                 <span role="img" aria-label="Editar">✏️</span>
               </button>
               <button className="turma-btn-view" onClick={() => handleVisualizar(turma)} title="Visualizar">
-                <span role="img" aria-label="Visualizar">👁️</span>
+                <img src={EyeIcon} alt="Visualizar" style={{ width: 20, height: 20 }} />
               </button>
             </span>
           </div>
         ))}
       </div>
 
+      
+      {modoFormulario && (
+        <div className="turma-modal-overlay" onClick={handleFecharFormulario}>
+          <div className="turma-modal-content" onClick={e => e.stopPropagation()}>
+            <button className="turma-modal-close" onClick={handleFecharFormulario}>×</button>
+            <Formulario
+              turmaEditando={turmaParaEditar}
+              aoSalvar={handleFecharFormulario}
+              aoCancelar={handleFecharFormulario}
+            />
+          </div>
+        </div>
+      )}
+
+      
       {turmaSelecionada && (
         <div className="turma-modal-overlay" onClick={() => setTurmaSelecionada(null)}>
           <div className="turma-modal-content" onClick={e => e.stopPropagation()}>
