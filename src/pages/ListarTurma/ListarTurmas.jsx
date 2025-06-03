@@ -64,16 +64,35 @@ function ListarTurmas() {
           <div>Ações</div>
         </div>
         {turmasFiltradas.map((turma, idx) => (
-          <div key={idx} className="turma-table-row">
+          <div
+            key={idx}
+            className="turma-table-row"
+            onClick={() => handleVisualizar(turma)}
+            style={{ cursor: 'pointer' }}
+          >
             <span className="turma-color-dot" style={{ backgroundColor: turma.cor }}></span>
             <span>{turma.turma}</span>
             <span>{turma.tempo}</span>
             <span>{turma.local}</span>
             <span className="turma-actions">
-              <button className="turma-btn-edit" onClick={() => handleEditar(turma)} title="Editar">
+              <button
+                className="turma-btn-edit"
+                title="Editar"
+                onClick={e => {
+                  e.stopPropagation();
+                  handleEditar(turma);
+                }}
+              >
                 <span role="img" aria-label="Editar">✏️</span>
               </button>
-              <button className="turma-btn-view" onClick={() => handleVisualizar(turma)} title="Visualizar">
+              <button
+                className="turma-btn-view"
+                title="Visualizar"
+                onClick={e => {
+                  e.stopPropagation();
+                  handleVisualizar(turma);
+                }}
+              >
                 <img src={EyeIcon} alt="Visualizar" style={{ width: 20, height: 20 }} />
               </button>
             </span>
@@ -81,7 +100,7 @@ function ListarTurmas() {
         ))}
       </div>
 
-      
+
       {modoFormulario && (
         <div className="turma-modal-overlay" onClick={handleFecharFormulario}>
           <div className="turma-modal-content" onClick={e => e.stopPropagation()}>
@@ -95,7 +114,7 @@ function ListarTurmas() {
         </div>
       )}
 
-      
+
       {turmaSelecionada && (
         <div className="turma-modal-overlay" onClick={() => setTurmaSelecionada(null)}>
           <div className="turma-modal-content" onClick={e => e.stopPropagation()}>
