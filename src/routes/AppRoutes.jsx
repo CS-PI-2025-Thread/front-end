@@ -26,8 +26,7 @@ const AppRoutes = () => {
           <Route path=":id" element={<InfoContract />} />
           <Route path=":id/editar" element={<EditContract />} />
         </Route>
-        </Route> 
-        <Route path="/listarturma" element={<ListarTurmas/>} />
+        <Route path="/listarturma" element={<ListarTurmas />} />
         <Route path="/turma" element={<Turma />} />
       </Routes>
     </BrowserRouter>
