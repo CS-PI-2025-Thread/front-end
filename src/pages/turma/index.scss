@@ -1,3 +1,4 @@
+@use "../../styles/vars.scss" as vars;
 // body{
 //     background-color: rgba(128, 128, 128, 0.541);
 // }
@@ -7,6 +8,16 @@
   margin: 0 auto;
 .container {
   padding: 2rem;
+  background-color: vars.$bg-form;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px vars.$text;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  color: vars.$text;
 }
 
 .container {
@@ -187,7 +198,7 @@
     width: 100%;
     padding: 0.75rem;
     font-size: 1rem;
-    border: 1px solid #ccc;
+    border: 1px solid vars.$border-form;
     border-radius: 6px;
   }
   
@@ -195,15 +206,13 @@
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 600;
-    color: #333;
+    color: vars.$text;
   }
   
   button {
     align-self: flex-start;
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
-    background-color: #2d7ff9;
-    color: #fff;
     border: none;
     border-radius: 6px;
     cursor: pointer;

@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { Button } from "../../../components";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import "./styles.scss";
 
 const InfoContract = ({ id: propId, onClose }) => {

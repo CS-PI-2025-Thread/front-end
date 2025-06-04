@@ -1,24 +1,28 @@
-@use "../../../styles/vars.scss" as vars;
+@use "../../styles/vars.scss" as vars;
 
 .btn-icon-edit {
-    background: vars.$btn-bg-icon;
-    color: vars.$btn-icon-edit;
-    border: none;
-    border-radius: 6px;
-    padding: 0.2rem 0.4rem;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: background 0.2s;
-    display: flex;
-    align-items: center;
-    margin: 0.2rem 0rem;
+  background: vars.$btn-primary;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.2rem 0.4rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  margin: 0.2rem 0rem;
 
-    &:hover {
-      background: vars.$btn-icon-hover;
-    }
+  &:hover {
+    background: vars.$btn-hoover;
   }
 
-.contract-table-container {
+  .bi-pencil-fill {
+    color: vars.$btn-icon-edit;
+  }
+}
+
+.table-container {
   width: 100%;
   min-height: 100vh;
   background: vars.$bg-primary;
@@ -27,15 +31,15 @@
 
 .btn-icon-table {
   background: vars.$btn-bg-icon;
-    color: vars.$text-header;
-    border: none;
-    border-radius: 6px;
-    padding: 0.5rem 0.7rem;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: background 0.2s;
-    display: flex;
-    align-items: center;
+  color: vars.$text-header;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 0.7rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
 }
 
 .table-header {
@@ -49,19 +53,21 @@
   .field-search {
     padding: 0.5rem 1rem;
     border-radius: 6px;
-    border: 1px solid vars.$table-border;
+    border: 1px solid vars.$border-form;
     font-size: 1rem;
     min-width: 220px;
     background: vars.$bg-secondary;
     transition: border 0.2s;
+
     &:focus {
-      border: 1.5px solid vars.$btn-hoover;
+      border: 1.5px solid #000080;
       outline: none;
     }
   }
 
   .btn-icon {
-    background: vars.$btn-bg-icon;;
+    background: vars.$btn-bg-icon;
+    color: vars.$text-header;
     border: none;
     border-radius: 6px;
     padding: 0.5rem 0.7rem;
@@ -72,7 +78,7 @@
     align-items: center;
 
     &:hover {
-      background: vars.$btn-hoover;
+      background: #003366;
     }
   }
 
@@ -81,33 +87,42 @@
     font-size: 1.3rem;
     margin-right: 0.5rem;
     cursor: pointer;
+
+    &:hover {
+      color: vars.$btn-icon-edit;
+    }
+
   }
 }
 
-.contract-table {
+.table {
   width: 100%;
   border-collapse: collapse;
   background: vars.$bg-list;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 2px 8px vars.$text;
+  box-shadow: 0 2px 8px #0001;
 
-  th, td {
+  tr {
+    border: 1px solid vars.$table-border;
+  }
+
+  th,
+  td {
     padding: 1rem 0.6rem;
     text-align: left;
-    border-bottom: 1px solid vars.$btn-primary;
+    border-bottom: 1px solid vars.$table-border;
     font-size: 1rem;
   }
-  
+
   td {
     padding: 0rem 0.6rem;
   }
 
   th {
     background: vars.$table-header;
-    color: vars.$text-header;
+    color: #fff;
     font-weight: 600;
-    border-bottom: 2px solid vars.$table-border;
   }
 
   tr:last-child td {
@@ -119,36 +134,27 @@
     transition: background 0.2s;
   }
 
-  td:last-child, th:last-child {
+  td:last-child,
+  th:last-child {
     text-align: center;
     width: 60px;
   }
-
-  .btn-icon {
-    background: none;
-    border: none;
-    color: vars.$btn-bg-icon;
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 0.3rem;
-    border-radius: 4px;
-    transition: background 0.2s;
-
-    &:hover {
-      background: vars.$bg-list-hover;
-    }
-  }
 }
 
+// Colocar no .scss de modal
 .modal-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: vars.$text;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
 }
+
 .modal-content {
   background: vars.$bg-secondary;
   padding: 0px 10px 10px 10px;
@@ -157,5 +163,5 @@
   min-height: 85vh;
   max-height: 85vh;
   border-radius: 16px;
-  box-shadow: -4px 4px 12px 2px vars.$text; 
+  box-shadow: -4px 4px 12px 2px rgba(0, 0, 0, 0.25);
 }

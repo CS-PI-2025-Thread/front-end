@@ -1,12 +1,11 @@
-import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Register, Info, Layout } from "../pages/client";
 import EditClient from "../pages/client/Register/EditClient";
-import ContractTable from "../pages/contract/components/ContractTable"
-import InfoContract from "../pages/contract/Info"
+import ContractTable from "../pages/contract/components/ContractTable";
+import InfoContract from "../pages/contract/Info";
 import EditContract from "../pages/contract/Register/EditContract";
-import RegisterContract from "../pages/contract/Register"
-import Turma from "../pages/turma"
+import RegisterContract from "../pages/contract/Register";
+import Turma from "../pages/turma";
 import ListarTurmas from "../pages/ListarTurma/ListarTurmas";
 
 // Aqui você pode adicionar as rotas do seu projeto
@@ -26,6 +25,7 @@ const AppRoutes = () => {
           <Route path="novo" element={<RegisterContract />} />
           <Route path=":id" element={<InfoContract />} />
           <Route path=":id/editar" element={<EditContract />} />
+        </Route>
         </Route> 
         <Route path="/listarturma" element={<ListarTurmas/>} />
         <Route path="/turma" element={<Turma />} />
