@@ -1,4 +1,4 @@
-@import url(../../styles/vars.scss);
+@import '../../styles/vars.scss';
 .turma-table-container {
   width: 100%;
   min-height: 100vh;
@@ -68,7 +68,7 @@
     border-radius: 50%;
     display: inline-block;
   }
-
+  
   .turma-actions {
     display: flex;
     gap: 0.5rem;
@@ -139,6 +139,23 @@
   border-radius: 16px;
   box-shadow: -4px 4px 12px 2px rgba(0, 0, 0, 0.25);
   position: relative;
+}
+.turma-btn-view img{
+  width: 20px; 
+  height: 20px;
+}
+.turma-color-dot {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+.turma-actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
 }
 .turma-modal-close {
   position: absolute;

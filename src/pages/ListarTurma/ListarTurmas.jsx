@@ -1,110 +1,116 @@
-import React, { useEffect, useState } from 'react';
-import Formulario from '../turma/index';
-import './ListarTurmas.scss';
-import EyeIcon from '../../assets/olho.png'
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Formulario from "../turma/index";
+import InfoTurma from "./InfoTurma";
+import Table from "../../components/Table/Table";
+import GenericContextProvider from "../../contexts/GenericContext";
+import EyeIcon from "../../assets/olho.png";
+import "./ListarTurmas.scss";
 
 function ListarTurmas() {
-  const [turmas, setTurmas] = useState([]);
-  const [busca, setBusca] = useState('');
-  const [turmaSelecionada, setTurmaSelecionada] = useState(null);
   const [modoFormulario, setModoFormulario] = useState(false);
   const [turmaParaEditar, setTurmaParaEditar] = useState(null);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    carregarTurmas();
-  }, []);
-
-  const carregarTurmas = () => {
-    const turmasSalvas = JSON.parse(localStorage.getItem('turmas')) || [];
-    turmasSalvas.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-    setTurmas(turmasSalvas);
+  const handleNovaTurma = () => {
+    navigate("/turma");
   };
-
-  const turmasFiltradas = turmas.filter(t =>
-    t.turma.toLowerCase().includes(busca.toLowerCase())
-  );
-
-  const handleVisualizar = (turma) => setTurmaSelecionada(turma);
-
   const handleEditar = (turma) => {
     setTurmaParaEditar(turma);
     setModoFormulario(true);
   };
-
-  const handleNovaTurma = () => {
-    setTurmaParaEditar(null);
-    setModoFormulario(true);
-  };
-
   const handleFecharFormulario = () => {
     setModoFormulario(false);
     setTurmaParaEditar(null);
-    carregarTurmas();
   };
 
   return (
-    <div className="turma-table-container">
-      <div className="turma-table-header">
-        <input
-          className="turma-search-field"
-          type="text"
-          placeholder="Buscar turma..."
-          value={busca}
-          onChange={e => setBusca(e.target.value)}
-        />
-        <button className="turma-btn-add" onClick={handleNovaTurma}>Nova Turma</button>
-      </div>
-
-      <div className="turma-table-list">
-        <div className="turma-table-row turma-table-head">
-          <div></div>
-          <div>Nome</div>
-          <div>Duração</div>
-          <div>Local</div>
-          <div>Ações</div>
-        </div>
-        {turmasFiltradas.map((turma, idx) => (
-          <div
-            key={idx}
-            className="turma-table-row"
-            onClick={() => handleVisualizar(turma)}
-            style={{ cursor: 'pointer' }}
-          >
-            <span className="turma-color-dot" style={{ backgroundColor: turma.cor }}></span>
-            <span>{turma.turma}</span>
-            <span>{turma.tempo}</span>
-            <span>{turma.local}</span>
-            <span className="turma-actions">
+    <GenericContextProvider lSName="turmas">
+      <Table
+        headerComponent={({ search, setSearch }) => (
+          <>
+            <input
+              className="field-search"
+              type="text"
+              placeholder="Buscar turma..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <button className="btn-icon-table" onClick={handleNovaTurma}>
+              Nova Turma
+              <i className="bi bi-plus"></i>
+            </button>
+          </>
+        )}
+        headerCells={["", "Nome", "Duração", "Local", ""]}
+        getRowProps={({ element, setSelectedId }) => ({
+          onClick: () => setSelectedId(element.id),
+          style: { cursor: "pointer" },
+        })}
+        visualize={({ selectedId, setSelectedId }) =>
+          selectedId && (
+            <InfoTurma
+              turmaId={selectedId}
+              onClose={() => setSelectedId(null)}
+            />
+          )
+        }
+      >
+        {(turma) => (
+          <>
+            <td>
+              <span
+                className="turma-color-dot"
+                style={{ backgroundColor: turma.cor }}
+              ></span>
+            </td>
+            <td>{turma.turma}</td>
+            <td>{turma.tempo}</td>
+            <td>{turma.local}</td>
+            <td className="turma-actions">
               <button
                 className="turma-btn-edit"
                 title="Editar"
-                onClick={e => {
+                onClick={(e) => {
                   e.stopPropagation();
                   handleEditar(turma);
                 }}
               >
-                <span role="img" aria-label="Editar">✏️</span>
+                <span role="img" aria-label="Editar">
+                  ✏️
+                </span>
               </button>
               <button
                 className="turma-btn-view"
                 title="Visualizar"
-                onClick={e => {
+                onClick={(e) => {
                   e.stopPropagation();
-                  handleVisualizar(turma);
+                  setSelectedId(turma.id);
                 }}
               >
-                <img src={EyeIcon} alt="Visualizar" style={{ width: 20, height: 20 }} />
+                <img
+                  src={EyeIcon}
+                  alt="Visualizar"
+                  style={{ width: 20, height: 20 }}
+                />
               </button>
-            </span>
-          </div>
-        ))}
-      </div>
-
+            </td>
+          </>
+        )}
+      </Table>
 
       {modoFormulario && (
         <div className="turma-modal-overlay" onClick={handleFecharFormulario}>
-          <div className="turma-modal-content" onClick={e => e.stopPropagation()}>
-            <button className="turma-modal-close" onClick={handleFecharFormulario}>×</button>
+          <div
+            className="turma-modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="turma-modal-close"
+              onClick={handleFecharFormulario}
+            >
+              ×
+            </button>
             <Formulario
               turmaEditando={turmaParaEditar}
               aoSalvar={handleFecharFormulario}
@@ -113,22 +119,7 @@ function ListarTurmas() {
           </div>
         </div>
       )}
-
-
-      {turmaSelecionada && (
-        <div className="turma-modal-overlay" onClick={() => setTurmaSelecionada(null)}>
-          <div className="turma-modal-content" onClick={e => e.stopPropagation()}>
-            <button className="turma-modal-close" onClick={() => setTurmaSelecionada(null)}>×</button>
-            <h2>{turmaSelecionada.turma}</h2>
-            <p><strong>Vagas:</strong> {turmaSelecionada.vagas}</p>
-            <p><strong>Duração:</strong> {turmaSelecionada.tempo}</p>
-            <p><strong>Local:</strong> {turmaSelecionada.local}</p>
-            <p><strong>Observações:</strong> {turmaSelecionada.observacoes}</p>
-            <p><strong>Cor:</strong> <span className="turma-color-dot" style={{ backgroundColor: turmaSelecionada.cor }} /></p>
-          </div>
-        </div>
-      )}
-    </div>
+    </GenericContextProvider>
   );
 }
 
