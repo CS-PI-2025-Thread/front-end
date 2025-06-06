@@ -1,36 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import Formulario from "../turma/index";
-import InfoTurma from "./InfoTurma";
-import Table from "../../components/Table/Table";
+import Table, { goRegistration, goEdit } from "../../components/Table/Table";
 import GenericContextProvider from "../../contexts/GenericContext";
-import EyeIcon from "../../assets/olho.png";
-import "./ListarTurmas.scss";
-import React, { useState } from "react";
-import Formulario from "../turma/index";
 import InfoTurma from "./InfoTurma";
-import Table from "../../components/Table/Table";
-import GenericContextProvider from "../../contexts/GenericContext";
 import EyeIcon from "../../assets/olho.png";
 import "./ListarTurmas.scss";
 
 function ListarTurmas() {
-  const [modoFormulario, setModoFormulario] = useState(false);
-  const [turmaParaEditar, setTurmaParaEditar] = useState(null);
-
-  // Modal de formulário
-  const handleNovaTurma = () => {
-    setTurmaParaEditar(null);
-    setModoFormulario(true);
-  };
-  const handleEditar = (turma) => {
-    setTurmaParaEditar(turma);
-    setModoFormulario(true);
-  };
-  const handleFecharFormulario = () => {
-    setModoFormulario(false);
-    setTurmaParaEditar(null);
-  };
+  const navigate = useNavigate();
+  const routeName = "turma"; // rota para o formulário de cadastro
 
   return (
     <GenericContextProvider lSName="turmas">
@@ -44,7 +22,10 @@ function ListarTurmas() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
-            <button className="btn-icon-table" onClick={handleNovaTurma}>
+            <button
+              className="btn-icon-table"
+              onClick={() => goRegistration(navigate, routeName)}
+            >
               Nova Turma
               <i className="bi bi-plus"></i>
             </button>
@@ -58,30 +39,30 @@ function ListarTurmas() {
         visualize={({ selectedId, setSelectedId }) =>
           selectedId && (
             <InfoTurma
-              turmaId={selectedId}
+              turma='../'
               onClose={() => setSelectedId(null)}
             />
           )
         }
       >
-        {(turma) => (
+        {(element) => (
           <>
             <td>
               <span
                 className="turma-color-dot"
-                style={{ backgroundColor: turma.cor }}
+                style={{ backgroundColor: element.cor }}
               ></span>
             </td>
-            <td>{turma.turma}</td>
-            <td>{turma.tempo}</td>
-            <td>{turma.local}</td>
+            <td>{element.turma}</td>
+            <td>{element.tempo}</td>
+            <td>{element.local}</td>
             <td className="turma-actions">
               <button
                 className="turma-btn-edit"
                 title="Editar"
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleEditar(turma);
+                  goEdit(navigate, routeName, element.id);
                 }}
               >
                 <span role="img" aria-label="Editar">
@@ -93,7 +74,7 @@ function ListarTurmas() {
                 title="Visualizar"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setSelectedId(turma.id);
+                  setSelectedId(element.id);
                 }}
               >
                 <img
@@ -106,27 +87,6 @@ function ListarTurmas() {
           </>
         )}
       </Table>
-
-      {modoFormulario && (
-        <div className="turma-modal-overlay" onClick={handleFecharFormulario}>
-          <div
-            className="turma-modal-content"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className="turma-modal-close"
-              onClick={handleFecharFormulario}
-            >
-              ×
-            </button>
-            <Formulario
-              turmaEditando={turmaParaEditar}
-              aoSalvar={handleFecharFormulario}
-              aoCancelar={handleFecharFormulario}
-            />
-          </div>
-        </div>
-      )}
     </GenericContextProvider>
   );
 }

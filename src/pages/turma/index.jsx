@@ -55,6 +55,16 @@ function Formulario() {
       setMostrarCampoNovoLocal(false);
     }
   };
+  const novaTurma = {
+  id: Date.now().toString(), // Gera um id único
+  turma: data.turma,
+  name: data.turma,
+  vagas: data.vagas,
+  tempo: `${data.tempo} minutos`,
+  local: data.local,
+  observacoes: data.observacoes,
+  cor: data.cor,
+};
 
   useEffect(() => {
     if (localSelecionado === 'novo-local') {
