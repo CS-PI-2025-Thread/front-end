@@ -6,14 +6,22 @@ import Table from "../../components/Table/Table";
 import GenericContextProvider from "../../contexts/GenericContext";
 import EyeIcon from "../../assets/olho.png";
 import "./ListarTurmas.scss";
+import React, { useState } from "react";
+import Formulario from "../turma/index";
+import InfoTurma from "./InfoTurma";
+import Table from "../../components/Table/Table";
+import GenericContextProvider from "../../contexts/GenericContext";
+import EyeIcon from "../../assets/olho.png";
+import "./ListarTurmas.scss";
 
 function ListarTurmas() {
   const [modoFormulario, setModoFormulario] = useState(false);
   const [turmaParaEditar, setTurmaParaEditar] = useState(null);
-  const navigate = useNavigate();
 
+  // Modal de formulário
   const handleNovaTurma = () => {
-    navigate("/turma");
+    setTurmaParaEditar(null);
+    setModoFormulario(true);
   };
   const handleEditar = (turma) => {
     setTurmaParaEditar(turma);
