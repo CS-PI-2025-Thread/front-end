@@ -29,6 +29,15 @@
   }
 }
 
+#add-movement-button {
+  background-color: green;
+}
+
+#add-movement-button-exit {
+  background-color: red;
+}
+
+
 .modal-overlay {
   position: absolute;
   left: 0;
@@ -38,4 +47,9 @@
   align-items: flex-start;
   z-index: 10;
   background: transparent;
+}
+
+.cash-p{
+  margin-top: 12px;
+  margin-bottom: 12px;
 }

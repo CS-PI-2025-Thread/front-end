@@ -1,16 +1,22 @@
 import Table from "../../../components/Table/Table";
-import {useGenericContext, GenericContextProvider } from "../../../contexts/GenericContext";
+import {
+  useGenericContext,
+  GenericContextProvider,
+} from "../../../contexts/GenericContext";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import movementCheckout from "./MovementCheckout.json";
 import MovementType from "./MovementType";
 import { Button, MonetaryInput, DialogBox } from "../../../components";
 import "./style.scss";
+import { set } from "date-fns";
 
 function CashTable() {
   const [modalOpen, setModalOpen] = useState(false);
   const [typeMovement, setTypeMovement] = useState("dinheiro");
   const [value, setValue] = useState("");
+  const [date, setDate] = useState();
+  const [cash, setCash] = useState([]);
   const methods = useForm();
   const { storageObject, initializeStorageObject, addStorageObject } =
     useGenericContext();
@@ -18,6 +24,10 @@ function CashTable() {
   useEffect(() => {
     initializeStorageObject(movementCheckout);
   }, [initializeStorageObject]);
+
+  useEffect(() => {
+    setCash(storageObject || []);
+  }, [storageObject]);
 
   const calculateTotalCash = (cash) => {
     return cash.reduce((total, item) => {
@@ -32,9 +42,38 @@ function CashTable() {
         return total + (item.movement === "Saida" ? -item.valor : item.valor);
       }, 0);
   };
-  
 
-  const cash = storageObject || [];
+  const exitCash = () => {
+    const changeCurrent = calculateCashBack(cash);
+
+    if (changeCurrent > 0) {
+      const exitFinal = {
+        venda: "Fechamento",
+        tipo: MovementType.DINHEIRO,
+        movement: "Saida",
+        data: new Date().toLocaleDateString("pt-BR"),
+        hora: new Date().toLocaleTimeString("pt-BR", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        valor: changeCurrent,
+      };
+
+      addStorageObject(exitFinal);
+    }
+  };
+
+  const saveDateExit = () => {
+    const now = new Date();
+    const formattedDateTime =
+      now.toLocaleDateString("pt-BR") +
+      " " +
+      now.toLocaleTimeString("pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    setDate(formattedDateTime);
+  };
 
   const handleAddMovement = () => {
     const sanitizedValue = value.replace(/[^\d,]/g, "").replace(",", ".");
@@ -74,10 +113,12 @@ function CashTable() {
             <td>{element.tipo}</td>
             <td>{element.data}</td>
             <td>{element.hora}</td>
-            <td>{new Intl.NumberFormat('pt-BR', {
-              style: 'currency',
-              currency: 'BRL'
-            }).format(element.valor)}</td>
+            <td>
+              {new Intl.NumberFormat("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              }).format(element.valor)}
+            </td>
             <td></td>
           </>
         )}
@@ -86,7 +127,27 @@ function CashTable() {
       <div className="cash-table-actions">
         <div className="cash-table-actions-info">
           <div style={{ position: "relative" }}>
+            <Button onClick={saveDateExit}>Fechar</Button>
+            {date && (
+              <DialogBox
+                title="Fechar Caixa"
+                onConfirm={() => {
+                  alert(`Caixa fechado em: ${date}`);
+                  exitCash();
+                  setDate(null);
+                }}
+                onCancel={() => setDate(null)}
+              >
+                <p className="cash-p">
+                  Certeza que gostaria de fechar o caixa?
+                </p>
+              </DialogBox>
+            )}
+          </div>
+
+          <div style={{ position: "relative" }}>
             <Button
+              id="add-movement-button"
               onClick={() => {
                 setTypeMovement(MovementType.DINHEIRO);
                 setModalOpen("Entrada");
@@ -113,6 +174,7 @@ function CashTable() {
 
           <div style={{ position: "relative" }}>
             <Button
+              id="add-movement-button-exit"
               onClick={() => {
                 setTypeMovement(MovementType.DINHEIRO);
                 setModalOpen("Saida");
