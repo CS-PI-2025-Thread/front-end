@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { validateCPF } from "../utils/validators";
+import { validateCPF } from "../utils/validateCPF";
 
 export const clientValidationSchema = yup.object().shape({
     name: yup.string().required("Nome é obrigatório"),
