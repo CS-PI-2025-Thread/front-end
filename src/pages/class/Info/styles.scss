@@ -1,0 +1,25 @@
+@use "../../../styles/vars.scss" as vars;
+
+.container-contract-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  font-size: 20px;
+  height: 100%;
+
+  .btn-icon {
+  width: auto;
+  min-width: unset;
+  padding: 6px 16px;
+  border-radius: 6px;
+  align-self: flex-start;
+  background: vars.$btn-bg-icon;
+  color: vars.$text-header;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+}
+}
