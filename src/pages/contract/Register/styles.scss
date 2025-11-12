@@ -41,13 +41,15 @@
 
     .side {
       display: flex;
-      gap: 16px;
+      align-items: flex-end;
+      gap: 8px;
       width: 100%;
 
       > * {
         flex: 1 1 0;
         min-width: 0;
       }
+
 
       .arrow-time {
         display: flex;

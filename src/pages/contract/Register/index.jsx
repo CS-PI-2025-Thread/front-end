@@ -124,6 +124,7 @@ const RegisterContract = ({ initialData = null, onSubmit: externalSubmit }) => {
             <div className="block">
               <h3>Dados Gerais do Contrato</h3>
               <Input label="Nome do Contrato" name="name" required />
+              <div className="row">
               <Select label="Status" name="status">
                 <option value="Disponível">Disponível</option>
                 <option value="Não Disponível">Não Disponível</option>
@@ -134,10 +135,12 @@ const RegisterContract = ({ initialData = null, onSubmit: externalSubmit }) => {
                 <option value="Template Verde">Template Verde</option>
                 <option value="Template Amarelo">Template Amarelo</option>
               </Select>
+              </div>
             </div>
 
             <div className="block">
               <h3>Parcelamento</h3>
+              <div className="row">
               <Select label="Parcelamento" name="installmentable">
                 <option value="">Selecione</option>
                 <option value="Parcelável">Parcelável</option>
@@ -151,10 +154,12 @@ const RegisterContract = ({ initialData = null, onSubmit: externalSubmit }) => {
                 />
               )}
               <MonetaryInput name="totalValue" label="Valor Total" required />
+              </div>
             </div>
 
             <div className="block">
               <h3>Vencimento</h3>
+              <div className="row">
               <Select label="Tipo de Vencimento" name="typeExpire" required>
                 <option value="">Selecione</option>
                 <option value="por Seção">Por Seção</option>
@@ -168,6 +173,7 @@ const RegisterContract = ({ initialData = null, onSubmit: externalSubmit }) => {
                 disabled={typeExpire === ""}
                 required
               />
+              </div>
             </div>
 
             <div className="block">
@@ -178,10 +184,15 @@ const RegisterContract = ({ initialData = null, onSubmit: externalSubmit }) => {
                 labelKey={"turma"}
                 options={classRoms}
               />
+            </div>
+            
+              <div className="block">
+                <h3>Catraca</h3>
+              
               <div className="side">
                 <Input label="Horário" name="timeMin" type="time" />
                 <span className="arrow-time">-</span>
-                <Input label="." name="timeMax" type="time" />
+                <Input name="timeMax" type="time" />
               </div>
               <CheckboxPanel
                 name="weekdays"
@@ -196,6 +207,7 @@ const RegisterContract = ({ initialData = null, onSubmit: externalSubmit }) => {
                   { value: "sabado", label: "Sáb" },
                 ]}
               />
+              
             </div>
 
             <Button>{initialData ? "Atualizar" : "Salvar"}</Button>
