@@ -12,12 +12,11 @@ import {
   Select,
   CheckboxPanel,
 } from "../../../components";
-import { useGenericContext } from "../../../contexts/GenericContext";
 import {
   toInternationalFormat,
   toBrazilianFormat,
 } from "../../../utils/convertDate";
-
+import EmployeeService from "../../../services/EmployeeService";
 import "./style.scss";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -30,7 +29,7 @@ const RegisterEmployee = ({ initialData = null, onSubmit: externalSubmit }) => {
   });
 
   const { handleSubmit, setValue, watch, reset } = methods;
-  const { addStorageObject, updateStorageObject } = useGenericContext();
+  const employeeService = new EmployeeService();
 
   const employee = watch();
   const [editableFields, setEditableFields] = useState({
@@ -44,53 +43,75 @@ const RegisterEmployee = ({ initialData = null, onSubmit: externalSubmit }) => {
     if (initialData) {
       const transformedData = {
         ...initialData,
-        dataNascimento: toInternationalFormat(initialData.dataNascimento),
+        birthDate: toInternationalFormat(initialData.birthDate),
       };
       reset(transformedData);
     }
   }, [initialData, reset]);
 
+  const mapWeekDays = (selectedDays) => {
+    const allDays = {
+      domingo: "sunday",
+      segunda: "monday",
+      terca: "tuesday",
+      quarta: "wednesday",
+      quinta: "thursday",
+      sexta: "friday",
+      sabado: "saturday",
+    };
+
+    const result = {};
+
+    Object.entries(allDays).forEach(([pt, en]) => {
+      result[en] = selectedDays?.includes(pt) || false;
+    });
+
+    return result;
+  };
   const prepareData = (data) => {
     const parsedData = {
       ...data,
-      nome: data.name || "",
-      dataNascimento: toBrazilianFormat(data.dataNascimento),
+      name: data.name || "",
+      email: data.email || "",
+      password: data.password || "",
+      birthDate: data.birthDate,
+      gender: data.gender || null,
+      maritalStatus: data.maritalStatus || null,
       cpf: data.cpf || "",
       rg: data.rg || "",
-      cidade: data.city || "",
-      estado: data.state || "",
-      bairro: data.district || "",
-      endereco: data.address || "",
-      numero: data.number || "",
-      complemento: data.complement || "",
-      estadoCivil: data.maritalStatus || "",
-      email: data.email || "",
-      contato: data.phone || "",
-      cargo: data.role || "",
-      status: data.status || "",
-      turno: data.shift || "",
-      dias: Array.isArray(data.dias) ? data.dias : [],
-      jornada: {
-        inicio: data.timeMin || "",
-        fim: data.timeMax || "",
-      },
+      professionalRegister: data.professionalRegister || "",
+      guardianPhone: data.guardianPhone || "",
+      cellphone: data.cellphone || "",
+      role: data.role || null,
+      status: data.status || null,
+      cep: data.cep || "",
+      address: data.address || "",
+      district: data.district || "",
+      city: data.city || "",
+      state: data.state || "",
+      number: data.number || "",
+      complement: data.complement || "",
+      shift: data.shift || null,
+      timeMin: data.timeMin || "",
+      timeMax: data.timeMax || "",
+      weekdays: mapWeekDays(data.weekdays),
     };
     return parsedData;
   };
 
   const onSubmit = (data) => {
     const parsedData = prepareData(data);
-
+    console.log("Dados enviados:", parsedData);
     if (externalSubmit) {
       externalSubmit(parsedData);
       return;
     }
 
     if (initialData && initialData.id) {
-      updateStorageObject(initialData.id, parsedData);
+      employeeService.update(initialData.id, parsedData);
       toast.success("Funcionário atualizado!");
     } else {
-      addStorageObject(parsedData);
+      employeeService.create(parsedData);
       toast.success("Funcionário cadastrado!");
       reset();
     }
@@ -121,6 +142,7 @@ const RegisterEmployee = ({ initialData = null, onSubmit: externalSubmit }) => {
       }
     }
   };
+
   return (
     <div className="container-employee-register">
       <Button onClick={() => navigate("/funcionario")}>
@@ -147,22 +169,21 @@ const RegisterEmployee = ({ initialData = null, onSubmit: externalSubmit }) => {
               <div className="row">
                 <Input
                   label="Data de Nascimento"
-                  name="dataNascimento"
-                  type="date"
+                  name="birthDate"
+                  type="birthDate"
                   required
                 />
                 <Select label="Sexo" name="gender" required>
                   <option value="">Selecione</option>
-                  <option value="Masculino">Masculino</option>
-                  <option value="Feminino">Feminino</option>
-                  <option value="Outro">Outro</option>
+                  <option value="MASCULINO">Masculino</option>
+                  <option value="FEMININO">Feminino</option>
                 </Select>
                 <Select label="Estado Civil" name="maritalStatus">
                   <option value="">Selecione</option>
-                  <option value="Solteiro">Solteiro</option>
-                  <option value="Casado">Casado</option>
-                  <option value="Divorciado">Divorciado</option>
-                  <option value="Viúvo">Viúvo</option>
+                  <option value="SOLTEIRO">Solteiro</option>
+                  <option value="CASADO">Casado</option>
+                  <option value="DIVORCIADO">Divorciado</option>
+                  <option value="VIÚVO">Viúvo</option>
                 </Select>
               </div>
               <div className="row">
@@ -184,7 +205,7 @@ const RegisterEmployee = ({ initialData = null, onSubmit: externalSubmit }) => {
               <div className="row">
                 <MaskedInput
                   label="Telefone"
-                  name="phone"
+                  name="guardianPhone"
                   mask="(00) 00000-0000"
                 />
                 <MaskedInput
@@ -194,14 +215,14 @@ const RegisterEmployee = ({ initialData = null, onSubmit: externalSubmit }) => {
                 />
                 <Select label="Cargo" name="role" required>
                   <option value="">Selecione</option>
-                  <option value="Administrador">Administrador</option>
-                  <option value="Professor">Professor</option>
-                  <option value="Personal Trainer">Personal Trainer</option>
-                  <option value="Recepcionista">Recepcionista</option>
+                  <option value="ADMIN">Administrador</option>
+                  <option value="PROFESSOR">Professor</option>
+                  <option value="PERSONAL_TRAINER">Personal Trainer</option>
+                  <option value="RECEPCIONISTA">Recepcionista</option>
                 </Select>
                 <Select label="Status" name="status" required>
-                  <option value="Ativo">Ativo</option>
-                  <option value="Cancelado">Cancelado</option>
+                  <option value="ATIVO">Ativo</option>
+                  <option value="CANCELADO">Cancelado</option>
                 </Select>
               </div>
             </div>
@@ -244,9 +265,9 @@ const RegisterEmployee = ({ initialData = null, onSubmit: externalSubmit }) => {
               <div className="row">
                 <Select label="Turno" name="shift" required>
                   <option value="">Selecione</option>
-                  <option value="Manhã">Manhã</option>
-                  <option value="Tarde">Tarde</option>
-                  <option value="Noite">Noite</option>
+                  <option value="MANHA">Manhã</option>
+                  <option value="TARDE">Tarde</option>
+                  <option value="NOITE">Noite</option>
                 </Select>
                 <Input
                   label="Horário de Entrada"
@@ -262,7 +283,7 @@ const RegisterEmployee = ({ initialData = null, onSubmit: externalSubmit }) => {
                 />
               </div>
               <CheckboxPanel
-                name="dias"
+                name="weekdays"
                 label="Dias da Semana"
                 required
                 options={[
