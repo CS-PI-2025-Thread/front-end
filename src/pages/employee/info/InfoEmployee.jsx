@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "../../../components";
 import { useGenericContext } from "../../../contexts/GenericContext";
+import EmployeeService from "../../../services/EmployeeService.js";
 import { formatCPF, formatRG, formatContact } from "../../../utils/helpers.js";
 import "./style.scss";
 
@@ -10,10 +11,20 @@ const InfoEmployee = () => {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const navigate = useNavigate();
   const { getStorageObjectById } = useGenericContext();
+  const employeeService = new EmployeeService();
 
   useEffect(() => {
-    setSelectedEmployee(getStorageObjectById(id));
-  }, [id, getStorageObjectById]);
+    const fetchEmployee = async () => {
+      try {
+        const employeeData = await employeeService.findById(id);
+        setSelectedEmployee(employeeData);
+      } catch (error) {
+        console.error("Failed to fetch employee data:", error);
+      }
+    };
+
+    fetchEmployee();
+  }, [id, employeeService]);
 
   return (
     <div className="container-employee-info">
@@ -26,12 +37,12 @@ const InfoEmployee = () => {
           <div className="column-personal">
             <h2>Dados Pessoais</h2>
             <p>
-              <strong>Nome:</strong> {" " + selectedEmployee.nome}
+              <strong>Nome:</strong> {" " + selectedEmployee.name}
             </p>
             <p>
               <strong>Data de Nascimento:</strong>{" "}
-              {selectedEmployee && selectedEmployee.dataNascimento
-                ? " " + selectedEmployee.dataNascimento
+              {selectedEmployee && selectedEmployee.birthDate
+                ? " " + selectedEmployee.birthDate
                 : " - "}
             </p>
             <p>
@@ -52,22 +63,22 @@ const InfoEmployee = () => {
               <strong>Endereço:</strong>{" "}
               {selectedEmployee &&
               [
-                selectedEmployee.endereco,
-                selectedEmployee.numero,
-                selectedEmployee.complemento,
-                selectedEmployee.bairro,
-                selectedEmployee.cidade,
-                selectedEmployee.estado,
+                selectedEmployee.address,
+                selectedEmployee.number,
+                selectedEmployee.complement,
+                selectedEmployee.neighborhood,
+                selectedEmployee.city,
+                selectedEmployee.state,
               ]
                 .filter(Boolean)
                 .join(", ").length > 0
                 ? [
-                    selectedEmployee.endereco,
-                    selectedEmployee.numero,
-                    selectedEmployee.complemento,
-                    selectedEmployee.bairro,
-                    selectedEmployee.cidade,
-                    selectedEmployee.estado,
+                    selectedEmployee.address,
+                    selectedEmployee.number,
+                    selectedEmployee.complement,
+                    selectedEmployee.neighborhood,
+                    selectedEmployee.city,
+                    selectedEmployee.state,
                   ]
                     .filter(Boolean)
                     .join(", ")
@@ -75,8 +86,8 @@ const InfoEmployee = () => {
             </p>
             <p>
               <strong>Estado Civil:</strong>
-              {selectedEmployee && selectedEmployee.estadoCivil
-                ? " " + selectedEmployee.estadoCivil
+              {selectedEmployee && selectedEmployee.maritalStatus
+                ? " " + selectedEmployee.maritalStatus
                 : " - "}
             </p>
           </div>
@@ -88,8 +99,8 @@ const InfoEmployee = () => {
             </p>
             <p>
               <strong>Contato:</strong>
-              {selectedEmployee && selectedEmployee.contato
-                ? " " + formatContact(selectedEmployee.contato)
+              {selectedEmployee && selectedEmployee.cellphone
+                ? " " + formatContact(selectedEmployee.cellphone)
                 : " - "}
             </p>
             <p>
@@ -98,7 +109,7 @@ const InfoEmployee = () => {
             </p>
             <p>
               <strong>Cargo:</strong>
-              {" " + selectedEmployee.cargo}
+              {" " + selectedEmployee.role}
             </p>
             <p>
               <strong>Status:</strong>
@@ -108,23 +119,23 @@ const InfoEmployee = () => {
             </p>
             <p>
               <strong>Dias da Semana: </strong>
-              {selectedEmployee && selectedEmployee.dias
-                ? selectedEmployee.dias.join(", ")
+              {selectedEmployee && selectedEmployee.weekDays
+                ? selectedEmployee.weekDays.join(", ")
                 : " - "}
             </p>
             <p>
               <strong>Turno: </strong>
-              {selectedEmployee && selectedEmployee.turno
-                ? selectedEmployee.turno
+              {selectedEmployee && selectedEmployee.shift
+                ? selectedEmployee.shift
                 : " - "}
             </p>
             <p>
-              <strong>Jornada: </strong>
-              {selectedEmployee && selectedEmployee.jornada
-                ? selectedEmployee.jornada.inicio +
-                  " - " +
-                  selectedEmployee.jornada.fim
-                : " - "}
+              <strong>Início: </strong>
+              {"" +selectedEmployee.timeMin}
+            </p>
+            <p>
+              <strong>Final: </strong>
+              {"" +selectedEmployee.timeMax}
             </p>
           </div>
         </div>

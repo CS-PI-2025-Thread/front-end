@@ -1,19 +1,32 @@
 import { useNavigate } from "react-router-dom";
 import Table from "../../../components/Table/Table.jsx";
 import { goRegistration, goView, goEdit } from "../../../utils/navigation.js";
-import { useGenericContext } from "../../../contexts/GenericContext.jsx";
 import { useTableLogic } from "../../../hooks/useTableLogic.jsx";
 import { Button } from "../../../components/index.jsx";
-
+import EmployeeService from "../../../services/EmployeeService.js";
 import "./style.scss";
+import { useEffect, useState } from "react";
 
 function EmployeeTable() {
   const navigate = useNavigate();
   const routeName = "funcionario";
-  const { storageObject } = useGenericContext();
+  const employeeService = new EmployeeService();
+  const [employees, setEmployees] = useState([]);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const response = await employeeService.findAll();
+        setEmployees(response);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    load();
+  }, []);
 
   const { search, setSearch, elementsToDisplay } = useTableLogic(
-    storageObject,
+    employees,
     "nome"
   );
 
@@ -41,7 +54,7 @@ function EmployeeTable() {
           </div>
         </>
       )}
-      headerCells={["Nome", "Cargo", "Status", "Jornada", ""]}
+      headerCells={["Nome", "Cargo", "Status", "Turno", ""]}
       getRowProps={({ element }) => ({
         onClick: () => {
           goView(navigate, routeName, element.id);
@@ -51,13 +64,11 @@ function EmployeeTable() {
     >
       {(element) => (
         <>
-          <td className="truncate-text">{element.nome}</td>
-          <td className="truncate-text">{element.cargo}</td>
+          <td className="truncate-text">{element.name}</td>
+          <td className="truncate-text">{element.role}</td>
           <td>{element.status}</td>
           <td>
-            {element && element.jornada
-              ? element.jornada.inicio + " - " + element.jornada.fim
-              : " - "}
+            {element.shift}
           </td>
           <td className="buttons">
             <Button
