@@ -222,7 +222,7 @@ const RegisterEmployee = ({ initialData = null, onSubmit: externalSubmit }) => {
                   <option value="">Selecione</option>
                   <option value="ADMIN">Administrador</option>
                   <option value="PROFESSOR">Professor</option>
-                  <option value="PERSONAL_TRAINER">Personal Trainer</option>
+                  <option value="PERSONAL">Personal Trainer</option>
                   <option value="RECEPCIONISTA">Recepcionista</option>
                 </Select>
                 <Select label="Status" name="status" required>

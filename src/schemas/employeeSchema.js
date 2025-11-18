@@ -18,24 +18,14 @@ export const employeeValidationSchema = yup.object().shape({
     .min(8, "A senha deve ter no mínimo 8 caracteres")
     .max(30, "A senha deve ter no máximo 30 caracteres"),
   birthDate: yup
-    .string()
-  .required("A data de nascimento é obrigatória")
-  .matches(
-    /^([0-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/\d{4}$/,
-    "Formato válido: DD/MM/YYYY"
-  )
-  .test("data-valida", "Data inválida", (value) => {
-    if (!value) return false;
-
-    const [dia, mes, ano] = value.split("/").map(Number);
-    const data = new Date(ano, mes - 1, dia);
-
-    return (
-      data.getFullYear() === ano &&
-      data.getMonth() === mes - 1 &&
-      data.getDate() === dia
-    );
-  }),
+      .string()
+      .transform((value) => {
+        if (typeof value === "string" && !/\d/.test(value)) {
+          return null;
+        }
+        return value;
+      })
+      .required("A data de nascimento é obrigatória"),
   gender: yup.string().required("O sexo é obrigatório"),
   maritalStatus: yup.string().nullable(),
   cpf: yup
