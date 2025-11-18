@@ -68,7 +68,7 @@ export const employeeValidationSchema = yup.object().shape({
     .string()
     .required("O registro profissional é obrigatório")
     .max(100, "Máximo de 100 caracteres"),
-  phone: yup
+  guardianPhone: yup
     .string()
     .nullable()
     .transform((value) => (value === "" ? null : value))
@@ -91,7 +91,7 @@ export const employeeValidationSchema = yup.object().shape({
   address: yup.string().nullable().max(300, "Máximo de 300 caracteres"),
   number: yup.string().nullable().max(10, "Máximo de 10 caracteres"),
   complement: yup.string().nullable().max(100, "Máximo de 100 caracteres"),
-  neighborhood: yup.string().nullable().max(100, "Máximo de 100 caracteres"),
+  district: yup.string().nullable().max(100, "Máximo de 100 caracteres"),
   city: yup
     .string()
     .transform((value) => (value === "" ? null : value))
@@ -117,7 +117,7 @@ export const employeeValidationSchema = yup.object().shape({
     .transform((value, originalValue) => (originalValue === "" ? null : value))
     .required("Horário de saída é obrigatório")
     .matches(/^(\d{2}):(\d{2})$/, "O formato do horário deve ser 'hh:mm'"),
-  weekdays: yup
+  weekDays: yup
     .array()
     .of(yup.string())
     .min(1, "Escolha ao menos um dia da semana")

@@ -94,24 +94,29 @@ const RegisterEmployee = ({ initialData = null, onSubmit: externalSubmit }) => {
       shift: data.shift || null,
       timeMin: data.timeMin || "",
       timeMax: data.timeMax || "",
-      weekdays: mapWeekDays(data.weekdays),
+      weekDays: mapWeekDays(data.weekDays),
     };
     return parsedData;
   };
 
-  const onSubmit = (data) => {
-    const parsedData = prepareData(data);
-    console.log("Dados enviados:", parsedData);
+   const onSubmit = async (data) => {
+    const payload = Object.fromEntries(
+      Object.entries(data).map(([key, value]) => [
+        key,
+        value === "" ? null : value,
+      ])
+    );
+
     if (externalSubmit) {
-      externalSubmit(parsedData);
+      externalSubmit(dataToSave);
       return;
     }
 
     if (initialData && initialData.id) {
-      employeeService.update(initialData.id, parsedData);
+      await employeeService.update(initialData.id, payload);
       toast.success("Funcionário atualizado!");
     } else {
-      employeeService.create(parsedData);
+      await employeeService.create(payload);
       toast.success("Funcionário cadastrado!");
       reset();
     }
@@ -167,10 +172,10 @@ const RegisterEmployee = ({ initialData = null, onSubmit: externalSubmit }) => {
               </div>
 
               <div className="row">
-                <Input
+                <MaskedInput
                   label="Data de Nascimento"
                   name="birthDate"
-                  type="birthDate"
+                  mask="00/00/0000"
                   required
                 />
                 <Select label="Sexo" name="gender" required>
@@ -269,21 +274,21 @@ const RegisterEmployee = ({ initialData = null, onSubmit: externalSubmit }) => {
                   <option value="TARDE">Tarde</option>
                   <option value="NOITE">Noite</option>
                 </Select>
-                <Input
+                <MaskedInput
                   label="Horário de Entrada"
                   name="timeMin"
-                  type="time"
+                  mask="00:00"
                   required
                 />
-                <Input
+                <MaskedInput
                   label="Horário de Saída"
                   name="timeMax"
-                  type="time"
+                  mask="00:00"
                   required
                 />
               </div>
               <CheckboxPanel
-                name="weekdays"
+                name="weekDays"
                 label="Dias da Semana"
                 required
                 options={[
