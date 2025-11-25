@@ -1,0 +1,15 @@
+@use "../../../../../styles/vars.scss" as vars;
+
+.box-info {
+  background: vars.$bg-secondary;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: -4px 4px 12px 2px vars.$text;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.edit {
+  align-self: flex-end;
+}

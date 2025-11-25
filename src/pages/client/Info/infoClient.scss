@@ -57,20 +57,16 @@
         gap: 10px;
         flex-wrap: wrap;
       }
-
-      .box-info {
-        background: vars.$bg-secondary;
-        padding: 20px;
-        border-radius: 16px;
-        box-shadow: -4px 4px 12px 2px vars.$text; 
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .edit {
-        align-self: flex-end;
-      }
     }
+  }
+}
+
+.menu-btn {
+  &.active {
+    background-color: vars.$client-menu-active;
+  }
+
+  &:hover {
+    background-color: vars.$client-menu-hover;
   }
 }

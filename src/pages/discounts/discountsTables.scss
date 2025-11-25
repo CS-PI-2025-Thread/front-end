@@ -1,0 +1,30 @@
+@use "../../styles/vars.scss" as vars;
+
+.btn-mode {
+    padding: 0.5rem 1rem;
+    border: 1px solid vars.$color-gray-300;
+    background-color: vars.$color-gray-50;
+    color: vars.$color-gray-700;
+    cursor: pointer;
+    transition: all 200ms;
+
+    &:first-child {
+        border-radius: 0.5rem 0 0 0.5rem;
+    }
+
+    &:last-child {
+        border-radius: 0 0.5rem 0.5rem 0;
+        margin-left: -1px;
+    }
+
+    &.active {
+        background-color: vars.$color-blue-800;
+        color: vars.$color-white;
+        border-color: vars.$color-blue-800;
+    }
+    
+}
+.partnersMi{
+    font-size: 1px;
+   
+}

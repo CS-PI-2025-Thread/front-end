@@ -1,20 +1,29 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
+import { useParams } from "react-router-dom";
 import { Button } from "../../../components";
 import "./infoClient.scss";
 import ClientService from "../../../services/ClientService";
+import { Data, Sale, Payment } from "../components/sections";
+
+const TABS_CONFIG = {
+  Status: () => <div>- Status -</div>,
+  Data: Data,
+  Sale: Sale,
+  Payment: Payment,
+  Contract: () => <div>- Contrato -</div>,
+  ClassRoom: () => <div>- Turma -</div>,
+  Training: () => <div>- Treino -</div>,
+  Evaluation: () => <div>- Avaliação -</div>,
+};
 
 const Info = () => {
   const { id } = useParams();
   const [selectedClient, setSelectedClient] = useState(null);
-  const navigate = useNavigate();
-  const clientService = new ClientService;
+  const [activeTab, setActiveTab] = useState("Data");
+  const [lastSaleIds, setLastSaleIds] = useState(null);
+  const clientService = new ClientService();
 
-  const goEdit = () => {
-    navigate(`/cliente/${id}/editar`);
-  };
-
-    useEffect(() => {
+  useEffect(() => {
     const fetchClient = async () => {
       try {
         const clients = await clientService.findById(id);
@@ -29,6 +38,51 @@ const Info = () => {
       fetchClient();
     }
   }, [id]);
+
+  const handleSaleSuccess = useCallback(
+    (saleId) => {
+      setLastSaleIds({ clientId: id, saleId });
+      setActiveTab("Payment");
+    },
+    [id]
+  );
+
+  const handleBackFromPayment = useCallback(() => {
+    setLastSaleIds(null);
+    setActiveTab("Sale");
+  }, []);
+
+  const renderContent = () => {
+    if (lastSaleIds?.saleId && lastSaleIds?.clientId) {
+      return (
+        <Payment
+          clientId={lastSaleIds.clientId}
+          saleId={lastSaleIds.saleId}
+          onBack={handleBackFromPayment}
+        />
+      );
+    }
+
+    const ComponentToRender = TABS_CONFIG[activeTab];
+    if (ComponentToRender) {
+      if (activeTab === "Sale") {
+        return <Sale clientId={id} onSaleSuccess={handleSaleSuccess} />;
+      }
+      return <ComponentToRender clientId={id} />;
+    }
+    return <div>Selecione uma aba.</div>;
+  };
+
+  const TAB_DISPLAY_NAMES = {
+    Data: "Dados",
+    Status: "Status",
+    Sale: "Venda",
+    Payment: "Pagamento",
+    Contract: "Contrato",
+    ClassRoom: "Turma",
+    Training: "Treino",
+    Evaluation: "Avaliação",
+  };
 
   return (
     <div className="container">
@@ -48,97 +102,23 @@ const Info = () => {
 
         <div className="client-content">
           <div className="tabs">
-            <Button>Status</Button>
-            <Button>Dados</Button>
-            <Button>Venda</Button>
-            <Button>Pagamento</Button>
-            <Button>Contrato</Button>
-            <Button>Turma</Button>
-            <Button>Treino</Button>
-            <Button>Avaliação</Button>
+            {Object.keys(TABS_CONFIG).map((tabName) => (
+              <Button
+                key={tabName}
+                className={`btn menu-btn ${
+                  activeTab === tabName ? "active" : ""
+                }`}
+                onClick={() => {
+                  setActiveTab(tabName);
+                  setLastSaleIds(null);
+                }}
+              >
+                {TAB_DISPLAY_NAMES[tabName]}
+              </Button>
+            ))}
           </div>
 
-          <div className="box-info">
-            {selectedClient ? (
-              <>
-                <p>
-                  <strong>Nome:</strong> {selectedClient.name}
-                </p>
-                <p>
-                  <strong>Email:</strong>{" "}
-                  {selectedClient.email ? selectedClient.email : "-"}
-                </p>
-                <p>
-                  <strong>Telefone:</strong>{" "}
-                  {selectedClient.cellphone ? selectedClient.cellphone : "-"}
-                </p>
-                <p>
-                  <strong>Data de nascimento:</strong>{" "}
-                  {selectedClient.birthDate}
-                </p>
-                <p>
-                  <strong>CPF:</strong> {selectedClient.cpf}
-                </p>
-                <p>
-                  <strong>Endereço:</strong>
-                  {selectedClient &&
-                  [
-                    selectedClient.address,
-                    selectedClient.number,
-                    selectedClient.complement,
-                    selectedClient.district,
-                    selectedClient.city,
-                    selectedClient.state,
-                  ]
-                    .filter(Boolean)
-                    .join(", ").length > 0
-                    ? [
-                        selectedClient.address,
-                        selectedClient.number,
-                        selectedClient.complement,
-                        selectedClient.district,
-                        selectedClient.city,
-                        selectedClient.state,
-                      ]
-                        .filter(Boolean)
-                        .join(", ")
-                    : " - "}
-                </p>
-              </>
-            ) : (
-              "Dados"
-            )}
-          </div>
-          <div className="box-info">
-            {selectedClient ? (
-              <>
-                <p>
-                  <strong>Contrato:</strong>{" "}
-                  {selectedClient.contrato ? selectedClient.contrato : "-"}
-                </p>
-              </>
-            ) : (
-              "Informações do contrato"
-            )}
-          </div>
-          <div className="box-info">
-            {selectedClient ? (
-              <>
-                <p>
-                  <strong>Observações:</strong>{" "}
-                  {selectedClient.additionalInfo
-                    ? selectedClient.additionalInfo
-                    : "-"}
-                </p>
-              </>
-            ) : (
-              "Campo de texto de observações"
-            )}
-          </div>
-
-          <div className="edit">
-            <Button onClick={goEdit}>Editar</Button>
-          </div>
+          {renderContent()}
         </div>
       </div>
     </div>

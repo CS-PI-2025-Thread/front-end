@@ -5,6 +5,8 @@ import ContractRoutes from "./ContractRoutes";
 import ClassRoutes from "./ClassRoutes";
 import LoginRoutes from "./LoginRoutes";
 import EmployeeRoutes from "./EmployeeRoutes";
+import DiscountRoutes from "./DiscountRoutes";
+import AgreementRoutes from "./AgreementsRoutes";
 
 const AppRoutes = () => {
   return (
@@ -16,6 +18,8 @@ const AppRoutes = () => {
         {ClassRoutes()}
         {LoginRoutes()}
         {EmployeeRoutes()}
+        {DiscountRoutes()}
+        {AgreementRoutes()}
       </Routes>
     </BrowserRouter>
   );
